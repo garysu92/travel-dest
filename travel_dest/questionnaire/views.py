@@ -4,24 +4,23 @@ from .models import Question, Choice
 # Create your views here.
 
 def index(request):
+    return render(request, 'questionnaire/index.html')
+
+def questions(request):
     questions = Question.objects.all()
     context = {'questions': questions}
-    return render(request, 'questionnaire/index.html', context)
+    return render(request, 'questionnaire/questions.html', context)
 
-def question1(request, question_id):
-    context = {'question': Question.objects.get(pk=question_id)}
-    return render(request, 'questionnaire/question1.html', context)
-
-def question2(request, question_id):
-    context = {'question': Question.objects.get(pk=question_id)}
-    return render(request, 'questionnaire/question2.html', context)
-
-def submit_form(request, curr_q, question_id):
+def submit_form(request):
+    ids = {}
     if request.method == 'POST':
-        selected_choice_id = request.POST.get('choice')  # 'choice' is the name of the input field
-        # Now you have the ID of the selected choice
-        # You can process it as needed, e.g., retrieve the choice from the database
-        selected_choice = Choice.objects.get(id=selected_choice_id)
-        print("Selected choice:", selected_choice.choice)
-    context = {'question': Question.objects.get(pk=question_id)}
-    return render(request, 'questionnare/question' + str(curr_q) + '.html', context)
+
+        questions = Question.objects.all()
+        
+        for question in questions:
+            question_id = question.id
+            selected_choice_id = request.POST.get('choice{}'.format(question_id))
+            ids[question_id] = selected_choice_id
+            
+    return render(request, 'questionnaire/destination.html', {'ids': ids})
+

@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+{% block content %}
+
+<form method="post" action="{% url 'questionnaire:submit_form' %}">
+    {% csrf_token %}
+    
+    {% for question in questions %}
+        <h1 class="text-center mb-3">Question {{ forloop.counter }}</h1>
+        <h2 class="text-center mb-3">{{ question.question }}</h2>
+        {% for choice in question.choice_set.all %}
+            <div class="form-check">
+                <input type="radio" name="choice{{ question.id }}" class="form-check-input" id="choice{{ question.id }}_{{ choice.id }}" value="{{ choice.id }}">
+                <label for="choice{{ question.id }}_{{ choice.id }}">{{ choice.choice }}</label>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    
+    <input type="submit" value="Submit Answers" class="btn btn-success btn-lg btn-block mt-4">
+</form>
+
+{% endblock %}

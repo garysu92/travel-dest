@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    {% for qid, cid in ids.items %}
+        {% if qid == 1 %}
+            <div>hello</div>
+        {% else %}
+            <div>hi</div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
